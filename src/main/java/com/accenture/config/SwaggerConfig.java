@@ -26,7 +26,7 @@ public class SwaggerConfig {
                 .required(false)
                 .description("Locale de réponse (ex: fr-FR, en-US, es-ES)")
                 .schema(new StringSchema()
-                        ._default("fr-FR")
+                        ._default("en-US")
                         ._enum(java.util.List.of("fr-FR", "br-FR", "en-US", "es-ES", "de-DE", "it-IT", "ja-JP", "zh-CN", "ru-RU"))
                 );
 
@@ -40,9 +40,9 @@ public class SwaggerConfig {
                         .addParameters(ACCEPT_LANGUAGE_PARAM_KEY, acceptLanguage))
                 .addSecurityItem(new SecurityRequirement().addList(SCHEME_NAME))
                 .info(new Info()
-                        .title("API de Gestion des Radios")
+                        .title("API de Gestion de location de véhicules")
                         .version("1.0.0")
-                        .description("API REST pour la gestion des radios, émissions et types d'émission")
+                        .description("API REST pour la gestion des véhicules, clients et visualisation du chiffre d'affaire")
                         .contact(new Contact()
                                 .name("Accenture")
                                 .email("contact@accenture.com")

@@ -1,2 +1,0 @@
-13h57 - Mettre le controller dans un dossier impl, creation de ClientApi et d'un dossier exception avec ClientException. Ajout des ErrorsDto. Ajout de clients dans controller et de find all dans service
-14h42 - Ajout de client (id) dans controller, et findById dans le service. Gerer les exceptions en conséquence, avec la creation du ressource bundle messages

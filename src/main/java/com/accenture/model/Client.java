@@ -1,18 +1,20 @@
 package com.accenture.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
 
 @Entity
 @Data
-@ToString
+@NoArgsConstructor
+@Table(name = "clients")
 public class Client {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String firstName;
@@ -24,4 +26,16 @@ public class Client {
     private String registerDate;
     private List<String> drivingLicenses;
     private boolean deactivate;
+
+    public Client(String firstName, String lastName, String address, String mail, String birthday, String password, String registerDate, List<String> drivingLicenses, boolean deactivate) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.mail = mail;
+        this.birthday = birthday;
+        this.password = password;
+        this.registerDate = registerDate;
+        this.drivingLicenses = drivingLicenses;
+        this.deactivate = deactivate;
+    }
 }
