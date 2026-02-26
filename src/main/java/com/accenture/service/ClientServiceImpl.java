@@ -1,5 +1,6 @@
 package com.accenture.service;
 
+import com.accenture.exception.ClientException;
 import com.accenture.mapper.ClientMapper;
 import com.accenture.model.Client;
 import com.accenture.repository.ClientDao;
@@ -48,6 +49,13 @@ public class ClientServiceImpl implements ClientService{
 
 
     private void verify(ClientRequestDto clientRequestDto) {
-
+        if (clientRequestDto == null)
+            throw new ClientException(messageSourceAccessor.getMessage("client.null"));
+        if (clientRequestDto.firstName() == null || clientRequestDto.firstName().isBlank())
+            throw new ClientException(messageSourceAccessor.getMessage("client.firstname.nullorblank"));
+        if (clientRequestDto.lastName() == null || clientRequestDto.lastName().isBlank())
+            throw new ClientException(messageSourceAccessor.getMessage("client.lastname.nullorblank"));
+        if (clientRequestDto.address() == null || clientRequestDto.address().isBlank())
+            throw new ClientException(messageSourceAccessor.getMessage("client.address.nullorblank"));
     }
 }
