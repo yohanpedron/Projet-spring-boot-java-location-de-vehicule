@@ -1,3 +1,2 @@
-11h42 - Creation pour le clients des interfaces ClientDao et ClientService et des classes ClientServiceImpl et ClientController
-11h49 - Developpement de ClientService avec methode verified en plus
-11h54 - Creation du dto avec des records ClientRequestDTO et ClientsResponseDto, des mappers, et renommage en anglais du attributs, classes (les ends points devront être en anglais aussi). Résolution du mapstruct dans le pom pour le @Bean en le changeant et en le reprenant.
+13h57 - Mettre le controller dans un dossier impl, creation de ClientApi et d'un dossier exception avec ClientException. Ajout des ErrorsDto. Ajout de clients dans controller et de find all dans service
+14h42 - Ajout de client (id) dans controller, et findById dans le service. Gerer les exceptions en conséquence, avec la creation du ressource bundle messages
