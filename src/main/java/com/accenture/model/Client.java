@@ -15,13 +15,13 @@ public class Client {
     @Id
     private int id;
 
-    private String nom;
-    private String prenom;
-    private String adresse;
-    private String email;
+    private String firstName;
+    private String lastName;
+    private String address;
+    private String mail;
     private String password;
-    private String dateDeNaissance;
-    private String dateInscription;
-    private List<String> listeDesPermis;
-    private boolean desactive;
+    private String birthday;
+    private String registerDate;
+    private List<String> drivingLicenses;
+    private boolean deactivate;
 }

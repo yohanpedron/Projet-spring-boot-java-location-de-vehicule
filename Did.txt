@@ -1,5 +1,3 @@
-11h00 - Modification du fichier application.properties afin d'avoir la base H2
-11h03 - Creations des couches et de la classe CLient dans le package model
-11h17 - Lancement de l'application à vide (génération du security password: 31405061-2fc3-4d94-80a0-57e071aa0e9e)
-11h21 - Lier le projet à une base h2 (nom : locationvehicules) et Swagger
-11h29 - Modification des dépendences, Sync maven et clean du projet
+11h42 - Creation pour le clients des interfaces ClientDao et ClientService et des classes ClientServiceImpl et ClientController
+11h49 - Developpement de ClientService avec methode verified en plus
+11h54 - Creation du dto avec des records ClientRequestDTO et ClientsResponseDto, des mappers, et renommage en anglais du attributs, classes (les ends points devront être en anglais aussi). Résolution du mapstruct dans le pom pour le @Bean en le changeant et en le reprenant.
