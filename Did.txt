@@ -1,0 +1,5 @@
+11h00 - Modification du fichier application.properties afin d'avoir la base H2
+11h03 - Creations des couches et de la classe CLient dans le package model
+11h17 - Lancement de l'application à vide (génération du security password: 31405061-2fc3-4d94-80a0-57e071aa0e9e)
+11h21 - Lier le projet à une base h2 (nom : locationvehicules) et Swagger
+11h29 - Modification des dépendences, Sync maven et clean du projet
