@@ -1,7 +1,9 @@
 package com.accenture.service;
 
 import com.accenture.exception.ClientException;
+import com.accenture.mapper.AddressMapper;
 import com.accenture.mapper.ClientMapper;
+import com.accenture.model.Address;
 import com.accenture.model.Client;
 import com.accenture.repository.ClientDao;
 import com.accenture.service.dto.ClientRequestDto;
@@ -22,12 +24,16 @@ public class ClientServiceImpl implements ClientService{
 
     private final ClientDao clientDao;
     private final ClientMapper clientMapper;
+    private final AddressMapper addressMapper;
     private final MessageSourceAccessor messageSourceAccessor;
 
     @Override
     public ClientResponseDto addClient(ClientRequestDto clientRequestDto) throws ClientException {
         verify(clientRequestDto);
-        Client saved = clientDao.save(clientMapper.toClient(clientRequestDto));
+        Client clientMapped = clientMapper.toClient(clientRequestDto);
+        Address addressMapped = addressMapper.toEntity(clientRequestDto.addressDto());
+        clientMapped.setAddress(addressMapped);
+        Client saved = clientDao.save(clientMapped);
         return clientMapper.toClientResponseDto(saved);
     }
 

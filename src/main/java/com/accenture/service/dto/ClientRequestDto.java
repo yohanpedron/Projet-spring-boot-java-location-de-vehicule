@@ -10,27 +10,28 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record ClientRequestDto(
-        @NotBlank(message = "client.firstname.null")
+
+        @NotBlank(message = "client.firstname.nullorblank")
         String firstName,
 
-        @NotBlank(message = "client.lastname.null")
+        @NotBlank(message = "client.lastname.nullorblank")
         String lastName,
 
         @NotNull(message = "client.address.null")
         @Valid
         AddressDto addressDto,
 
-        @NotBlank(message = "client.mail.null")
+        @NotBlank(message = "client.mail.nullorblank")
         @Email
         String mail,
 
-        @NotBlank(message = "client.password.null")
+        @NotBlank(message = "client.password.nullorblank")
         String password,
 
-        @NotBlank(message = "client.birthday.null")
+        @NotBlank(message = "client.birthday.nullorblank")
         String birthday,
 
-        @NotBlank(message = "client.registerdate.null")
+        @NotBlank(message = "client.registerdate.nullorblank")
         String registerDate,
 
         @NotEmpty(message = "client.drivinglicences.empty")

@@ -8,7 +8,7 @@ public record ClientResponseDto(
         int id ,
         String firstName,
         String lastName,
-        AddressDto addressDto,
+        Address address,
         String mail,
         String password,
         String birthday,

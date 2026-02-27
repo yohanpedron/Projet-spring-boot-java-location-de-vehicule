@@ -1,6 +1,8 @@
 package com.accenture.model;
 
+import com.accenture.service.dto.AddressDto;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -10,6 +12,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Client {
 
     @Id
@@ -19,7 +22,7 @@ public class Client {
     private String firstName;
     private String lastName;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
     private String mail;
