@@ -10,7 +10,6 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "clients")
 public class Client {
 
     @Id
@@ -19,23 +18,39 @@ public class Client {
 
     private String firstName;
     private String lastName;
-    private String address;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Address address;
+
     private String mail;
     private String password;
     private String birthday;
     private String registerDate;
+
     private List<String> drivingLicenses;
+
     private boolean deactivate;
 
-    public Client(String firstName, String lastName, String address, String mail, String birthday, String password, String registerDate, List<String> drivingLicenses, boolean deactivate) {
+    public Client(String firstName, String lastName, Address address, String mail, String password, String birthday, String registerDate, List<String> drivingLicenses, boolean deactivate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.mail = mail;
-        this.birthday = birthday;
         this.password = password;
+        this.birthday = birthday;
         this.registerDate = registerDate;
         this.drivingLicenses = drivingLicenses;
         this.deactivate = deactivate;
+    }
+
+    public Client(String firstName, String lastName, Address address, String mail, String password, String birthday, String registerDate, List<String> drivingLicenses) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.mail = mail;
+        this.password = password;
+        this.birthday = birthday;
+        this.registerDate = registerDate;
+        this.drivingLicenses = drivingLicenses;
     }
 }

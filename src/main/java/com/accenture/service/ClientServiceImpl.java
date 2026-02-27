@@ -25,7 +25,7 @@ public class ClientServiceImpl implements ClientService{
     private final MessageSourceAccessor messageSourceAccessor;
 
     @Override
-    public ClientResponseDto addClient(ClientRequestDto clientRequestDto){
+    public ClientResponseDto addClient(ClientRequestDto clientRequestDto) throws ClientException {
         verify(clientRequestDto);
         Client saved = clientDao.save(clientMapper.toClient(clientRequestDto));
         return clientMapper.toClientResponseDto(saved);
@@ -55,7 +55,25 @@ public class ClientServiceImpl implements ClientService{
             throw new ClientException(messageSourceAccessor.getMessage("client.firstname.nullorblank"));
         if (clientRequestDto.lastName() == null || clientRequestDto.lastName().isBlank())
             throw new ClientException(messageSourceAccessor.getMessage("client.lastname.nullorblank"));
-        if (clientRequestDto.address() == null || clientRequestDto.address().isBlank())
-            throw new ClientException(messageSourceAccessor.getMessage("client.address.nullorblank"));
+        if (clientRequestDto.addressDto() == null)
+            throw new ClientException(messageSourceAccessor.getMessage("client.address.null"));
+        if (clientRequestDto.addressDto().street() == null || clientRequestDto.addressDto().street().isBlank())
+            throw new ClientException(messageSourceAccessor.getMessage("client.address.street.nullorblank"));
+        if (clientRequestDto.addressDto().postalCode() == null || clientRequestDto.addressDto().postalCode().isBlank())
+            throw new ClientException(messageSourceAccessor.getMessage("client.address.postalcode.nullorblank"));
+        if (clientRequestDto.addressDto().city() == null || clientRequestDto.addressDto().city().isBlank())
+            throw new ClientException(messageSourceAccessor.getMessage("client.address.city.nullorblank"));
+        if (clientRequestDto.mail() == null || clientRequestDto.mail().isBlank())
+            throw new ClientException(messageSourceAccessor.getMessage("client.mail.nullorblank"));
+        if (clientRequestDto.password() == null || clientRequestDto.password().isBlank())
+            throw new ClientException(messageSourceAccessor.getMessage("client.password.nullorblank"));
+        if (clientRequestDto.birthday() == null || clientRequestDto.birthday().isBlank())
+            throw new ClientException(messageSourceAccessor.getMessage("client.birthday.nullorblank"));
+        if (clientRequestDto.registerDate() == null || clientRequestDto.registerDate().isBlank())
+            throw new ClientException(messageSourceAccessor.getMessage("client.registerdate.nullorblank"));
+        for(int compteur = 0;compteur < clientRequestDto.drivingLicenses().size();compteur++) {
+            if (clientRequestDto.drivingLicenses().get(compteur) == null || clientRequestDto.drivingLicenses().get(compteur).isBlank())
+                throw new ClientException(messageSourceAccessor.getMessage("client.oneofdrivinglicences.nullorblank"));
+        }
     }
 }
