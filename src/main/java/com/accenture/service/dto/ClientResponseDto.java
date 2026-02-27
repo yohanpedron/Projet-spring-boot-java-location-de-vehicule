@@ -2,6 +2,7 @@ package com.accenture.service.dto;
 
 import com.accenture.model.Address;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public record ClientResponseDto(
@@ -11,7 +12,7 @@ public record ClientResponseDto(
         Address address,
         String mail,
         String password,
-        String birthday,
+        LocalDate birthday,
         String registerDate,
         List<String> drivingLicenses
 ) {

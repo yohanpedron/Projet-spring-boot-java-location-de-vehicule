@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -27,14 +28,14 @@ public class Client {
 
     private String mail;
     private String password;
-    private String birthday;
+    private LocalDate birthday;
     private String registerDate;
 
     private List<String> drivingLicenses;
 
     private boolean deactivate;
 
-    public Client(String firstName, String lastName, Address address, String mail, String password, String birthday, String registerDate, List<String> drivingLicenses, boolean deactivate) {
+    public Client(String firstName, String lastName, Address address, String mail, String password, LocalDate birthday, String registerDate, List<String> drivingLicenses, boolean deactivate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -46,7 +47,7 @@ public class Client {
         this.deactivate = deactivate;
     }
 
-    public Client(String firstName, String lastName, Address address, String mail, String password, String birthday, String registerDate, List<String> drivingLicenses) {
+    public Client(String firstName, String lastName, Address address, String mail, String password, LocalDate birthday, String registerDate, List<String> drivingLicenses) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;

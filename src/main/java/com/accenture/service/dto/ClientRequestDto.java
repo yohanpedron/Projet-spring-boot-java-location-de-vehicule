@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public record ClientRequestDto(
@@ -28,8 +30,7 @@ public record ClientRequestDto(
         @NotBlank(message = "client.password.nullorblank")
         String password,
 
-        @NotBlank(message = "client.birthday.nullorblank")
-        String birthday,
+        LocalDate birthday,
 
         @NotBlank(message = "client.registerdate.nullorblank")
         String registerDate,

@@ -14,6 +14,8 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,8 +75,15 @@ public class ClientServiceImpl implements ClientService{
             throw new ClientException(messageSourceAccessor.getMessage("client.mail.nullorblank"));
         if (clientRequestDto.password() == null || clientRequestDto.password().isBlank())
             throw new ClientException(messageSourceAccessor.getMessage("client.password.nullorblank"));
-        if (clientRequestDto.birthday() == null || clientRequestDto.birthday().isBlank())
-            throw new ClientException(messageSourceAccessor.getMessage("client.birthday.nullorblank"));
+        IO.println(clientRequestDto.birthday());
+        IO.println(LocalDate.now(ZoneId.of("Europe/Paris")));
+        IO.println(clientRequestDto.birthday().plusYears(18));
+        IO.println(LocalDate.now(ZoneId.of("Europe/Paris")).minusYears(18));
+        IO.println(LocalDate.now(ZoneId.of("Europe/Paris")).minusYears(18).isBefore(clientRequestDto.birthday()));
+        if (clientRequestDto.birthday() == null)
+            throw new ClientException(messageSourceAccessor.getMessage("client.birthday.null"));
+        if (LocalDate.now(ZoneId.of("Europe/Paris")).minusYears(18).isBefore(clientRequestDto.birthday()))
+            throw new ClientException(messageSourceAccessor.getMessage("client.birthday.ageunder18"));
         if (clientRequestDto.registerDate() == null || clientRequestDto.registerDate().isBlank())
             throw new ClientException(messageSourceAccessor.getMessage("client.registerdate.nullorblank"));
         for(int compteur = 0;compteur < clientRequestDto.drivingLicenses().size();compteur++) {
