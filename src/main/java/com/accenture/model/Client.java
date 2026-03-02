@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,14 +29,15 @@ public class Client {
 
     private String mail;
     private String password;
+
     private LocalDate birthday;
-    private String registerDate;
+    private LocalDate registerDate;
 
     private List<String> drivingLicenses;
 
     private boolean deactivate;
 
-    public Client(String firstName, String lastName, Address address, String mail, String password, LocalDate birthday, String registerDate, List<String> drivingLicenses, boolean deactivate) {
+    public Client(String firstName, String lastName, Address address, String mail, String password, LocalDate birthday, LocalDate registerDate, List<String> drivingLicenses, boolean deactivate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -47,7 +49,7 @@ public class Client {
         this.deactivate = deactivate;
     }
 
-    public Client(String firstName, String lastName, Address address, String mail, String password, LocalDate birthday, String registerDate, List<String> drivingLicenses) {
+    public Client(String firstName, String lastName, Address address, String mail, String password, LocalDate birthday, LocalDate registerDate, List<String> drivingLicenses) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -55,6 +57,16 @@ public class Client {
         this.password = password;
         this.birthday = birthday;
         this.registerDate = registerDate;
+        this.drivingLicenses = drivingLicenses;
+    }
+
+    public Client(String firstName, String lastName, Address address, String mail, String password, LocalDate birthday, List<String> drivingLicenses) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.mail = mail;
+        this.password = password;
+        this.birthday = birthday;
         this.drivingLicenses = drivingLicenses;
     }
 }

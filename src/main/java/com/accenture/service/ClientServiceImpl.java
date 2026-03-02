@@ -10,14 +10,17 @@ import com.accenture.service.dto.ClientRequestDto;
 import com.accenture.service.dto.ClientResponseDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.hibernate.boot.models.xml.internal.db.JoinColumnProcessing;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 @AllArgsConstructor
@@ -35,6 +38,7 @@ public class ClientServiceImpl implements ClientService{
         Client clientMapped = clientMapper.toClient(clientRequestDto);
         Address addressMapped = addressMapper.toEntity(clientRequestDto.addressDto());
         clientMapped.setAddress(addressMapped);
+        clientMapped.setRegisterDate(LocalDate.now(ZoneId.of("Europe/Paris")));
         Client saved = clientDao.save(clientMapped);
         return clientMapper.toClientResponseDto(saved);
     }
@@ -69,23 +73,22 @@ public class ClientServiceImpl implements ClientService{
             throw new ClientException(messageSourceAccessor.getMessage("client.address.street.nullorblank"));
         if (clientRequestDto.addressDto().postalCode() == null || clientRequestDto.addressDto().postalCode().isBlank())
             throw new ClientException(messageSourceAccessor.getMessage("client.address.postalcode.nullorblank"));
+        if (!Pattern.matches("^[0-9]{5}$",clientRequestDto.addressDto().postalCode()))
+            throw new ClientException(messageSourceAccessor.getMessage("client.address.postalcode.wrongformat"));
         if (clientRequestDto.addressDto().city() == null || clientRequestDto.addressDto().city().isBlank())
             throw new ClientException(messageSourceAccessor.getMessage("client.address.city.nullorblank"));
         if (clientRequestDto.mail() == null || clientRequestDto.mail().isBlank())
             throw new ClientException(messageSourceAccessor.getMessage("client.mail.nullorblank"));
         if (clientRequestDto.password() == null || clientRequestDto.password().isBlank())
             throw new ClientException(messageSourceAccessor.getMessage("client.password.nullorblank"));
-        IO.println(clientRequestDto.birthday());
-        IO.println(LocalDate.now(ZoneId.of("Europe/Paris")));
-        IO.println(clientRequestDto.birthday().plusYears(18));
-        IO.println(LocalDate.now(ZoneId.of("Europe/Paris")).minusYears(18));
-        IO.println(LocalDate.now(ZoneId.of("Europe/Paris")).minusYears(18).isBefore(clientRequestDto.birthday()));
+        if (!Pattern.matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$",clientRequestDto.password()))
+            throw new ClientException(messageSourceAccessor.getMessage("client.password.wrongformat"));
         if (clientRequestDto.birthday() == null)
             throw new ClientException(messageSourceAccessor.getMessage("client.birthday.null"));
         if (LocalDate.now(ZoneId.of("Europe/Paris")).minusYears(18).isBefore(clientRequestDto.birthday()))
             throw new ClientException(messageSourceAccessor.getMessage("client.birthday.ageunder18"));
-        if (clientRequestDto.registerDate() == null || clientRequestDto.registerDate().isBlank())
-            throw new ClientException(messageSourceAccessor.getMessage("client.registerdate.nullorblank"));
+        if (clientRequestDto.drivingLicenses() == null)
+            throw new ClientException(messageSourceAccessor.getMessage("client.drivinglicences.null"));
         for(int compteur = 0;compteur < clientRequestDto.drivingLicenses().size();compteur++) {
             if (clientRequestDto.drivingLicenses().get(compteur) == null || clientRequestDto.drivingLicenses().get(compteur).isBlank())
                 throw new ClientException(messageSourceAccessor.getMessage("client.oneofdrivinglicences.nullorblank"));

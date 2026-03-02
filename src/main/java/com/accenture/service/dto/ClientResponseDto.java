@@ -13,7 +13,7 @@ public record ClientResponseDto(
         String mail,
         String password,
         LocalDate birthday,
-        String registerDate,
+        LocalDate registerDate,
         List<String> drivingLicenses
 ) {
 }
