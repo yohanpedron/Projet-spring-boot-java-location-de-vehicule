@@ -1,12 +1,9 @@
 package com.accenture.model;
 
-import com.accenture.service.dto.AddressDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,20 +12,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Client {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    private String firstName;
-    private String lastName;
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Client extends ConnectedUser {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
-
-    private String mail;
-    private String password;
 
     private LocalDate birthday;
     private LocalDate registerDate;
@@ -37,35 +25,26 @@ public class Client {
 
     private boolean deactivate;
 
-    public Client(String firstName, String lastName, Address address, String mail, String password, LocalDate birthday, LocalDate registerDate, List<String> drivingLicenses, boolean deactivate) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Client(String firstName, String lastName, Address address, String mail, String password, Role role, LocalDate birthday, LocalDate registerDate, List<String> drivingLicenses, boolean deactivate) {
+        super(firstName,lastName,mail,password,role);
         this.address = address;
-        this.mail = mail;
-        this.password = password;
         this.birthday = birthday;
         this.registerDate = registerDate;
         this.drivingLicenses = drivingLicenses;
         this.deactivate = deactivate;
     }
 
-    public Client(String firstName, String lastName, Address address, String mail, String password, LocalDate birthday, LocalDate registerDate, List<String> drivingLicenses) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Client(String firstName, String lastName, Address address, String mail, String password, Role role, LocalDate birthday, LocalDate registerDate, List<String> drivingLicenses) {
+        super(firstName,lastName,mail,password,role);
         this.address = address;
-        this.mail = mail;
-        this.password = password;
         this.birthday = birthday;
         this.registerDate = registerDate;
         this.drivingLicenses = drivingLicenses;
     }
 
-    public Client(String firstName, String lastName, Address address, String mail, String password, LocalDate birthday, List<String> drivingLicenses) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Client(String firstName, String lastName, Address address, String mail, String password, Role role, LocalDate birthday, List<String> drivingLicenses) {
+        super(firstName,lastName,mail,password,role);
         this.address = address;
-        this.mail = mail;
-        this.password = password;
         this.birthday = birthday;
         this.drivingLicenses = drivingLicenses;
     }

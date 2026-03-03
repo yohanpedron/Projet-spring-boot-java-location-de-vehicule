@@ -40,6 +40,7 @@ public record ClientRequestDto(
         @Valid
         String password,
 
+
         LocalDate birthday,
 
         @NotNull(message = "client.drivinglicences.null")

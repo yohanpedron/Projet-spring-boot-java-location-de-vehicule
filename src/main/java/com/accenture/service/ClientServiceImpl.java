@@ -1,5 +1,6 @@
 package com.accenture.service;
 
+import com.accenture.model.Role;
 import com.accenture.exception.ClientException;
 import com.accenture.mapper.AddressMapper;
 import com.accenture.mapper.ClientMapper;
@@ -8,18 +9,14 @@ import com.accenture.model.Client;
 import com.accenture.repository.ClientDao;
 import com.accenture.service.dto.ClientRequestDto;
 import com.accenture.service.dto.ClientResponseDto;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.hibernate.boot.models.xml.internal.db.JoinColumnProcessing;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Service
@@ -38,27 +35,16 @@ public class ClientServiceImpl implements ClientService{
         Client clientMapped = clientMapper.toClient(clientRequestDto);
         Address addressMapped = addressMapper.toEntity(clientRequestDto.addressDto());
         clientMapped.setAddress(addressMapped);
+        clientMapped.setRole(Role.CLIENT);
         clientMapped.setRegisterDate(LocalDate.now(ZoneId.of("Europe/Paris")));
         Client saved = clientDao.save(clientMapped);
         return clientMapper.toClientResponseDto(saved);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<ClientResponseDto> findAll() {
+    private List<ClientResponseDto> findAll() {
         List<Client> clients = clientDao.findAll();
         return clients.stream().map(clientMapper::toClientResponseDto).toList();
     }
-
-    @Transactional(readOnly = true)
-    @Override
-    public ClientResponseDto findById(int idClient) {
-        Optional<Client> optionalClient = clientDao.findById(idClient);
-        if (optionalClient.isEmpty())
-            throw new EntityNotFoundException(messageSourceAccessor.getMessage("client.id.notfound"));
-        return clientMapper.toClientResponseDto(optionalClient.get());
-    }
-
 
     private void verify(ClientRequestDto clientRequestDto) {
         if (clientRequestDto == null)
@@ -79,6 +65,10 @@ public class ClientServiceImpl implements ClientService{
             throw new ClientException(messageSourceAccessor.getMessage("client.address.city.nullorblank"));
         if (clientRequestDto.mail() == null || clientRequestDto.mail().isBlank())
             throw new ClientException(messageSourceAccessor.getMessage("client.mail.nullorblank"));
+        for(int compteur = 0;compteur < findAll().size();compteur++) {
+            if (findAll().get(compteur).mail().equals(clientRequestDto.mail()))
+                throw new ClientException(messageSourceAccessor.getMessage("client.mail.alreadyexist"));
+        }
         if (clientRequestDto.password() == null || clientRequestDto.password().isBlank())
             throw new ClientException(messageSourceAccessor.getMessage("client.password.nullorblank"));
         if (!Pattern.matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$",clientRequestDto.password()))

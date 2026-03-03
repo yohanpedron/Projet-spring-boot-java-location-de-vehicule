@@ -11,7 +11,4 @@ public interface ClientService {
 
     ClientResponseDto addClient(ClientRequestDto clientRequestDto) throws ClientException;
 
-    List<ClientResponseDto> findAll();
-
-    ClientResponseDto findById(int idClient);
 }

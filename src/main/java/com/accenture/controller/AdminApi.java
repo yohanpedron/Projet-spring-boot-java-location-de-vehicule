@@ -1,10 +1,9 @@
 package com.accenture.controller;
 
 import com.accenture.controller.advice.ErrorDto;
+import com.accenture.service.dto.AdminRequestDto;
 import com.accenture.service.dto.ClientRequestDto;
-import com.accenture.service.dto.ClientResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,16 +11,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+@Tag(name = "Admins", description = "API of admins management")
+@RequestMapping("/admins")
+public interface AdminApi {
 
-@Tag(name = "Clients", description = "API of clients management")
-@RequestMapping("/clients")
-public interface ClientApi {
-
-    @Operation(summary = "Add a new client")
-    @ApiResponse(responseCode = "200", description = "Client created")
+    @Operation(summary = "Add a new admin")
+    @ApiResponse(responseCode = "200", description = "Admin created")
     @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = ErrorDto.class)))
     @PutMapping
-    ResponseEntity<Void> addClient(@RequestBody ClientRequestDto clientRequestDto);
-
+    ResponseEntity<Void> addAdmin(@RequestBody AdminRequestDto adminRequestDto, @RequestHeader(name = "authorization") String base64Header);
 }
