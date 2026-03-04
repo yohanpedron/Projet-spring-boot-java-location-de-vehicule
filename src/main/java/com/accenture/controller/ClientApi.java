@@ -1,6 +1,7 @@
 package com.accenture.controller;
 
 import com.accenture.controller.advice.ErrorDto;
+import com.accenture.service.dto.AdminResponseDto;
 import com.accenture.service.dto.ClientRequestDto;
 import com.accenture.service.dto.ClientResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,4 +25,20 @@ public interface ClientApi {
     @PutMapping
     ResponseEntity<Void> addClient(@RequestBody ClientRequestDto clientRequestDto);
 
+    @Operation(summary = "List of all clients")
+    @ApiResponse(responseCode = "200", description = "List of all clients")
+    @GetMapping
+    public ResponseEntity<List<ClientResponseDto>> clients();
+
+    @Operation(summary = "Get client by id")
+    @ApiResponse(responseCode = "200", description = "Get client by id")
+    @ApiResponse(responseCode = "404", description = "Client not found", content = @Content(schema = @Schema(implementation = ErrorDto.class)))
+    @GetMapping("/{id}")
+    ResponseEntity<ClientResponseDto> client(@Parameter(description = "Client's ID", required = true) @PathVariable("id") int idClient);
+
+    @Operation(summary = "Delete client by id")
+    @ApiResponse(responseCode = "204", description = "Client deleted")
+    @ApiResponse(responseCode = "404", description = "CLient not found", content = @Content(schema = @Schema(implementation = ErrorDto.class)))
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deleteClient(@Parameter(description = "Client's ID", required = true) @PathVariable("id") int idClient);
 }

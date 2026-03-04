@@ -12,4 +12,7 @@ public interface AdminService {
 
     List<AdminResponseDto> findAllAdmins();
 
+    AdminResponseDto findAdminById(int idAdmin);
+
+    void deleteAdmin(int idAdmin);
 }

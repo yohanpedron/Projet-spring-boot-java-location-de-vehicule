@@ -6,6 +6,7 @@ import com.accenture.service.dto.AdminRequestDto;
 import com.accenture.service.dto.AdminResponseDto;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -31,5 +32,12 @@ public class AdminController implements AdminApi {
         return ResponseEntity.ok(adminService.findAllAdmins());
     }
 
+    @Override
+    public ResponseEntity<AdminResponseDto> admin(int idAdmin){ return ResponseEntity.ok(adminService.findAdminById(idAdmin)); }
 
+    @Override
+    public ResponseEntity<Void> deleteAdmin(int idAdmin) {
+        adminService.deleteAdmin(idAdmin);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
