@@ -40,4 +40,10 @@ public class AdminController implements AdminApi {
         adminService.deleteAdmin(idAdmin);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @Override
+    public ResponseEntity<AdminResponseDto> patchAdmin(int idAdmin, AdminRequestDto adminRequestDto) {
+        AdminResponseDto adminResponseDto = adminService.modifyPartiallyAdmin(idAdmin, adminRequestDto);
+        return ResponseEntity.ok(adminResponseDto);
+    }
 }

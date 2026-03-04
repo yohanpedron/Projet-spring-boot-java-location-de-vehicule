@@ -65,24 +65,39 @@ public class AdminServiceImpl implements AdminService {
         adminDao.deleteById(idAdmin);
     }
 
+    @Override
+    public AdminResponseDto modifyPartiallyAdmin(int idAdmin, AdminRequestDto adminRequestDto){
+        Admin admin = adminDao.findById(idAdmin).orElseThrow(() -> new EntityNotFoundException(messageSourceAccessor.getMessage(Messages.ADMIN_NOT_FOUND)));
+        if (adminRequestDto.firstName() != null) {
+            if (!adminRequestDto.firstName().isBlank()) {
+                admin.setFirstName(adminRequestDto.firstName());
+            } else {
+                throw new AdminException(messageSourceAccessor.getMessage(""));
+            }
+        } else {
+            throw new AdminException(messageSourceAccessor.getMessage("admin."));
+        }
+        if (adminRequestDto.lastName() != null && !adminRequestDto.lastName().isBlank())
+            admin.setLastName(adminRequestDto.lastName());
+        if (adminRequestDto.function() != null && !adminRequestDto.function().isBlank())
+            admin.setLastName(adminRequestDto.function());
+        if (adminRequestDto.mail() != null && !adminRequestDto.mail().isBlank() && adminDao.findAll().stream().filter(element -> element.getMail().equals(adminRequestDto.mail())).findAny().isEmpty()) {
+            admin.setMail(adminRequestDto.mail());
+        } else {
+
+        }
+        if (adminRequestDto.password() != null && !adminRequestDto.password().isBlank() && Pattern.matches("^(?=.*\\p{Nd})(?=.*\\p{Lu})(?=.*\\p{Ll})(?=.*[&#@_§-])[\\p{L}\\p{Nd}&#@_§-]{8,16}$",adminRequestDto.password()))
+            admin.setPassword(adminRequestDto.password());
+        Admin saved = adminDao.save(admin);
+        return adminMapper.toAdminResponseDto(saved);
+    }
+
     public void verify(AdminRequestDto adminRequestDto){
         if (adminRequestDto == null)
             throw new AdminException(messageSourceAccessor.getMessage("admin.null"));
-        if (adminRequestDto.firstName() == null || adminRequestDto.firstName().isBlank())
-            throw new AdminException(messageSourceAccessor.getMessage("admin.firstname.nullorblank"));
-        if (adminRequestDto.lastName() == null || adminRequestDto.lastName().isBlank())
-            throw new AdminException(messageSourceAccessor.getMessage("admin.lastname.nullorblank"));
-        if (adminRequestDto.function() == null || adminRequestDto.function().isBlank())
-            throw new AdminException(messageSourceAccessor.getMessage("admin.function.nullorblank"));
-        if (adminRequestDto.mail() == null || adminRequestDto.mail().isBlank())
-            throw new AdminException(messageSourceAccessor.getMessage("admin.mail.nullorblank"));
         for(int compteur = 0;compteur < findAllAdmins().size();compteur++) {
             if (findAllAdmins().get(compteur).mail().equals(adminRequestDto.mail()))
                 throw new AdminException(messageSourceAccessor.getMessage("admin.mail.alreadyexist"));
         }
-        if (adminRequestDto.password() == null || adminRequestDto.password().isBlank())
-            throw new AdminException(messageSourceAccessor.getMessage("admin.password.nullorblank"));
-        if (!Pattern.matches("^(?=.*\\p{Nd})(?=.*\\p{Lu})(?=.*\\p{Ll})(?=.*[&#@_§-])[\\p{L}\\p{Nd}&#@_§-]{8,16}$",adminRequestDto.password()))
-            throw new AdminException(messageSourceAccessor.getMessage("admin.password.wrongformat"));
     }
 }

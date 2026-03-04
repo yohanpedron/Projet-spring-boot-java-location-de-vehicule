@@ -44,4 +44,10 @@ public interface AdminApi {
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteAdmin(@Parameter(description = "Admin's ID", required = true) @PathVariable("id") int idAdmin);
 
+    @Operation(summary = "Modify partially admin")
+    @ApiResponse(responseCode = "200", description = "Admin modified partially")
+    @ApiResponse(responseCode = "404", description = "Admin not found", content = @Content(schema = @Schema(implementation = ErrorDto.class)))
+    @PatchMapping("/{id}")
+    ResponseEntity<AdminResponseDto> patchAdmin(@Parameter(description = "Admin's ID", required = true) @PathVariable("id") int idAdmin, @RequestBody AdminRequestDto adminRequestDto);
+
 }

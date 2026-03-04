@@ -15,4 +15,6 @@ public interface AdminService {
     AdminResponseDto findAdminById(int idAdmin);
 
     void deleteAdmin(int idAdmin);
+
+    AdminResponseDto modifyPartiallyAdmin(int idAdmin, AdminRequestDto adminRequestDto);
 }
