@@ -12,6 +12,8 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 @Transactional
@@ -30,7 +32,27 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.toAdminResponseDto(saved);
     }
 
-    public void verify(AdminRequestDto adminRequestDto){
+    @Override
+    public List<AdminResponseDto> findAllAdmins(){
+        List<Admin> radios = adminDao.findAll();
+        return radios.stream()
+                .map(adminMapper::toAdminResponseDto)
+                .toList();
+    }
 
+    public void verify(AdminRequestDto adminRequestDto){
+        if (adminRequestDto == null)
+            throw new AdminException(messageSourceAccessor.getMessage("admin.null"));
+        if (adminRequestDto.firstName() == null || adminRequestDto.firstName().isBlank())
+            throw new AdminException(messageSourceAccessor.getMessage("admin.firstname.nullorblank"));
+        if (adminRequestDto.lastName() == null || adminRequestDto.lastName().isBlank())
+            throw new AdminException(messageSourceAccessor.getMessage("admin.lastname.nullorblank"));
+        if (adminRequestDto.function() == null || adminRequestDto.function().isBlank())
+            throw new AdminException(messageSourceAccessor.getMessage("admin.function.nullorblank"));
+        if (adminRequestDto.mail() == null || adminRequestDto.mail().isBlank())
+            throw new AdminException(messageSourceAccessor.getMessage("admin.mail.nullorblank"));
+
+        if (adminRequestDto.password() == null || adminRequestDto.password().isBlank())
+            throw new AdminException(messageSourceAccessor.getMessage("admin.password.nullorblank"));
     }
 }

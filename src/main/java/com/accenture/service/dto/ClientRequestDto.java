@@ -35,7 +35,7 @@ public record ClientRequestDto(
         String mail,
 
         @NotBlank(message = "client.password.nullorblank")
-        @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[&#@_§-]).{8,16}$", message = "client.password.wrongformat")
+        @Pattern(regexp = "^(?=.*\\p{Nd})(?=.*\\p{Lu})(?=.*\\p{Ll})(?=.*[&#@_§-])[\\p{L}\\p{Nd}&#@_§-]{8,16}$", message = "client.password.wrongformat")
         @Schema(example = "Abcdef1&")
         @Valid
         String password,

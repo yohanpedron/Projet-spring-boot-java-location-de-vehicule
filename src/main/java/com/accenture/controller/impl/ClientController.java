@@ -22,7 +22,6 @@ public class ClientController implements ClientApi {
 
     private final ClientService clientService;
 
-    @PutMapping
     @Override
     public ResponseEntity<Void> addClient(@Valid ClientRequestDto clientRequestDto){
         ClientResponseDto clientResponseDto = clientService.addClient(clientRequestDto);

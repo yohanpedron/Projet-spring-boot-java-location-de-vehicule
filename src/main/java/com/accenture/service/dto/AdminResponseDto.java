@@ -10,13 +10,8 @@ public record AdminResponseDto(
         String firstName,
         String lastName,
         String function,
-        Address address,
         String mail,
-        String password,
-        LocalDate birthday,
-        LocalDate registerDate,
-        List<String> drivingLicenses,
-        boolean deactivate
+        String password
 ) {
 
 }
