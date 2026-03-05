@@ -45,4 +45,5 @@ public interface ClientApi {
     @ApiResponse(responseCode = "404", description = "Client not found", content = @Content(schema = @Schema(implementation = ErrorDto.class)))
     @PatchMapping("/{id}")
     ResponseEntity<ClientResponseDto> patchClient(@Parameter(description = "Client's ID", required = true) @PathVariable("id") int idClient, @RequestBody ClientRequestPatchDto clientRequestPatchDto);
+
 }
