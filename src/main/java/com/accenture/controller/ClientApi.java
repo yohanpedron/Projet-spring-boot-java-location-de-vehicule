@@ -1,9 +1,7 @@
 package com.accenture.controller;
 
 import com.accenture.controller.advice.ErrorDto;
-import com.accenture.service.dto.AdminResponseDto;
-import com.accenture.service.dto.ClientRequestDto;
-import com.accenture.service.dto.ClientResponseDto;
+import com.accenture.service.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -41,4 +39,10 @@ public interface ClientApi {
     @ApiResponse(responseCode = "404", description = "CLient not found", content = @Content(schema = @Schema(implementation = ErrorDto.class)))
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteClient(@Parameter(description = "Client's ID", required = true) @PathVariable("id") int idClient);
+
+    @Operation(summary = "Modify partially client")
+    @ApiResponse(responseCode = "200", description = "Client modified partially")
+    @ApiResponse(responseCode = "404", description = "Client not found", content = @Content(schema = @Schema(implementation = ErrorDto.class)))
+    @PatchMapping("/{id}")
+    ResponseEntity<ClientResponseDto> patchClient(@Parameter(description = "Client's ID", required = true) @PathVariable("id") int idClient, @RequestBody ClientRequestPatchDto clientRequestPatchDto);
 }

@@ -2,6 +2,7 @@ package com.accenture.service;
 
 import com.accenture.exception.AdminException;
 import com.accenture.service.dto.AdminRequestDto;
+import com.accenture.service.dto.AdminRequestPatchDto;
 import com.accenture.service.dto.AdminResponseDto;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface AdminService {
 
     void deleteAdmin(int idAdmin);
 
-    AdminResponseDto modifyPartiallyAdmin(int idAdmin, AdminRequestDto adminRequestDto);
+    AdminResponseDto modifyPartiallyAdmin(int idAdmin, AdminRequestPatchDto adminRequestPatchDto);
 }

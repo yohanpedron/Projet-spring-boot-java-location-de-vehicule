@@ -3,6 +3,7 @@ package com.accenture.service;
 import com.accenture.exception.ClientException;
 import com.accenture.service.dto.AdminResponseDto;
 import com.accenture.service.dto.ClientRequestDto;
+import com.accenture.service.dto.ClientRequestPatchDto;
 import com.accenture.service.dto.ClientResponseDto;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,4 +18,6 @@ public interface ClientService {
     ClientResponseDto findClientById(int idClient);
 
     void deleteClient(int idClient);
+
+    ClientResponseDto modifyPartiallyClient(int idClient, ClientRequestPatchDto clientRequestPatchDto);
 }

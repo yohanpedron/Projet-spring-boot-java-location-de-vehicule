@@ -2,9 +2,7 @@ package com.accenture.controller.impl;
 
 import com.accenture.controller.ClientApi;
 import com.accenture.service.ClientService;
-import com.accenture.service.dto.AdminResponseDto;
-import com.accenture.service.dto.ClientRequestDto;
-import com.accenture.service.dto.ClientResponseDto;
+import com.accenture.service.dto.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,5 +39,11 @@ public class ClientController implements ClientApi {
     public ResponseEntity<Void> deleteClient(int idClient) {
         clientService.deleteClient(idClient);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Override
+    public ResponseEntity<ClientResponseDto> patchClient(int idClient, ClientRequestPatchDto clientRequestPatchDto) {
+        ClientResponseDto clientResponseDto = clientService.modifyPartiallyClient(idClient, clientRequestPatchDto);
+        return ResponseEntity.ok(clientResponseDto);
     }
 }

@@ -1,5 +1,6 @@
 package com.accenture.service;
 
+import com.accenture.exception.AdminException;
 import com.accenture.model.Admin;
 import com.accenture.model.Role;
 import com.accenture.exception.ClientException;
@@ -9,6 +10,7 @@ import com.accenture.model.Address;
 import com.accenture.model.Client;
 import com.accenture.repository.ClientDao;
 import com.accenture.service.dto.ClientRequestDto;
+import com.accenture.service.dto.ClientRequestPatchDto;
 import com.accenture.service.dto.ClientResponseDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -65,6 +67,67 @@ public class ClientServiceImpl implements ClientService{
         if (!clientDao.existsById(idClient))
             throw new EntityNotFoundException(messageSourceAccessor.getMessage(CLIENT_NOT_FOUND));
         clientDao.deleteById(idClient);
+    }
+
+    @Override
+    public ClientResponseDto modifyPartiallyClient(int idClient, ClientRequestPatchDto clientRequestPatchDto){
+        Client client = clientDao.findById(idClient).orElseThrow(() -> new EntityNotFoundException(messageSourceAccessor.getMessage(CLIENT_NOT_FOUND)));
+        if (clientRequestPatchDto.firstName() != null && !clientRequestPatchDto.firstName().isBlank())
+            client.setFirstName(clientRequestPatchDto.firstName());
+        if (clientRequestPatchDto.lastName() != null && !clientRequestPatchDto.lastName().isBlank())
+            client.setLastName(clientRequestPatchDto.lastName());
+        if (clientRequestPatchDto.addressDto() != null) {
+            if (clientRequestPatchDto.addressDto().street() != null && !clientRequestPatchDto.addressDto().street().isBlank()) {
+                Address modifiedAddress = addressMapper.toEntity(clientRequestPatchDto.addressDto());
+                modifiedAddress.setPostalCode(client.getAddress().getPostalCode());
+                modifiedAddress.setCity(client.getAddress().getCity());
+                client.setAddress(modifiedAddress);
+            }
+            if (clientRequestPatchDto.addressDto().postalCode() != null && !clientRequestPatchDto.addressDto().postalCode().isBlank()) {
+                if (!Pattern.matches("^[0-9]{5}$", clientRequestPatchDto.addressDto().postalCode()))
+                    throw new ClientException(messageSourceAccessor.getMessage("client.address.postalcode.wrongformat"));
+                Address modifiedAddress = addressMapper.toEntity(clientRequestPatchDto.addressDto());
+                modifiedAddress.setStreet(client.getAddress().getStreet());
+                modifiedAddress.setCity(client.getAddress().getCity());
+                client.setAddress(modifiedAddress);
+            }
+            if (clientRequestPatchDto.addressDto().city() != null && !clientRequestPatchDto.addressDto().city().isBlank()) {
+                Address modifiedAddress = addressMapper.toEntity(clientRequestPatchDto.addressDto());
+                modifiedAddress.setStreet(client.getAddress().getStreet());
+                modifiedAddress.setPostalCode(client.getAddress().getPostalCode());
+                client.setAddress(modifiedAddress);
+            }
+        }
+        if (clientRequestPatchDto.mail() != null && !clientRequestPatchDto.mail().isBlank()){
+            if (Pattern.matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$",clientRequestPatchDto.mail())){
+                if (clientDao.findAll().stream().filter(element -> element.getMail().equals(clientRequestPatchDto.mail())).findAny().isEmpty()) {
+                    client.setMail(clientRequestPatchDto.mail());
+                } else {
+                    throw new ClientException(messageSourceAccessor.getMessage("client.mail.alreadyexist"));
+                }
+            } else {
+                throw new ClientException(messageSourceAccessor.getMessage("client.mail.wrongformat"));
+            }
+        }
+        if (clientRequestPatchDto.password() != null && !clientRequestPatchDto.password().isBlank()) {
+            if (Pattern.matches("^(?=.*\\p{Nd})(?=.*\\p{Lu})(?=.*\\p{Ll})(?=.*[&#@_§-])[\\p{L}\\p{Nd}&#@_§-]{8,16}$", clientRequestPatchDto.password()))
+                client.setPassword(clientRequestPatchDto.password());
+            else
+                throw new ClientException(messageSourceAccessor.getMessage("client.password.wrongformat"));
+        }
+        if (LocalDate.now(ZoneId.of("Europe/Paris")).minusYears(18).isBefore(clientRequestPatchDto.birthday()))
+            throw new ClientException(messageSourceAccessor.getMessage("client.birthday.ageunder18"));
+        if (!LocalDate.now(ZoneId.of("Europe/Paris")).minusYears(18).isBefore(clientRequestPatchDto.birthday()))
+            client.setBirthday(clientRequestPatchDto.birthday());
+        if (clientRequestPatchDto.drivingLicenses() != null && !clientRequestPatchDto.drivingLicenses().isEmpty()) {
+            for(int compteur = 0;compteur < clientRequestPatchDto.drivingLicenses().size();compteur++) {
+                if (clientRequestPatchDto.drivingLicenses().get(compteur) == null || clientRequestPatchDto.drivingLicenses().get(compteur).isBlank())
+                    throw new ClientException(messageSourceAccessor.getMessage("client.oneofdrivinglicences.nullorblank"));
+            }
+            client.setDrivingLicenses(clientRequestPatchDto.drivingLicenses());
+        }
+        Client saved = clientDao.save(client);
+        return clientMapper.toClientResponseDto(saved);
     }
 
     private void verify(ClientRequestDto clientRequestDto) {

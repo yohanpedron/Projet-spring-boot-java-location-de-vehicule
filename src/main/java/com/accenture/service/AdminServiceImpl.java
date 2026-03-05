@@ -9,10 +9,7 @@ import com.accenture.mapper.AdminMapper;
 import com.accenture.model.Admin;
 import com.accenture.repository.AdminDao;
 import com.accenture.repository.ClientDao;
-import com.accenture.service.dto.AdminRequestDto;
-import com.accenture.service.dto.AdminResponseDto;
-import com.accenture.service.dto.ClientRequestDto;
-import com.accenture.service.dto.ClientResponseDto;
+import com.accenture.service.dto.*;
 import com.accenture.utils.Messages;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -66,28 +63,31 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminResponseDto modifyPartiallyAdmin(int idAdmin, AdminRequestDto adminRequestDto){
+    public AdminResponseDto modifyPartiallyAdmin(int idAdmin, AdminRequestPatchDto adminRequestPatchDto){
         Admin admin = adminDao.findById(idAdmin).orElseThrow(() -> new EntityNotFoundException(messageSourceAccessor.getMessage(Messages.ADMIN_NOT_FOUND)));
-        if (adminRequestDto.firstName() != null) {
-            if (!adminRequestDto.firstName().isBlank()) {
-                admin.setFirstName(adminRequestDto.firstName());
+        if (adminRequestPatchDto.firstName() != null && !adminRequestPatchDto.firstName().isBlank())
+            admin.setFirstName(adminRequestPatchDto.firstName());
+        if (adminRequestPatchDto.lastName() != null && !adminRequestPatchDto.lastName().isBlank())
+            admin.setLastName(adminRequestPatchDto.lastName());
+        if (adminRequestPatchDto.function() != null && !adminRequestPatchDto.function().isBlank())
+            admin.setLastName(adminRequestPatchDto.function());
+        if (adminRequestPatchDto.mail() != null && !adminRequestPatchDto.mail().isBlank()) {
+            if (Pattern.matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$",adminRequestPatchDto.mail())){
+                if (adminDao.findAll().stream().filter(element -> element.getMail().equals(adminRequestPatchDto.mail())).findAny().isEmpty()) {
+                    admin.setMail(adminRequestPatchDto.mail());
+                } else {
+                    throw new AdminException(messageSourceAccessor.getMessage("admin.mail.alreadyexist"));
+                }
             } else {
-                throw new AdminException(messageSourceAccessor.getMessage(""));
+                throw new AdminException(messageSourceAccessor.getMessage("admin.mail.wrongformat"));
             }
-        } else {
-            throw new AdminException(messageSourceAccessor.getMessage("admin."));
         }
-        if (adminRequestDto.lastName() != null && !adminRequestDto.lastName().isBlank())
-            admin.setLastName(adminRequestDto.lastName());
-        if (adminRequestDto.function() != null && !adminRequestDto.function().isBlank())
-            admin.setLastName(adminRequestDto.function());
-        if (adminRequestDto.mail() != null && !adminRequestDto.mail().isBlank() && adminDao.findAll().stream().filter(element -> element.getMail().equals(adminRequestDto.mail())).findAny().isEmpty()) {
-            admin.setMail(adminRequestDto.mail());
-        } else {
-
+        if (adminRequestPatchDto.password() != null && !adminRequestPatchDto.password().isBlank()) {
+            if (Pattern.matches("^(?=.*\\p{Nd})(?=.*\\p{Lu})(?=.*\\p{Ll})(?=.*[&#@_§-])[\\p{L}\\p{Nd}&#@_§-]{8,16}$", adminRequestPatchDto.password()))
+                admin.setPassword(adminRequestPatchDto.password());
+            else
+                throw new AdminException(messageSourceAccessor.getMessage("admin.password.wrongformat"));
         }
-        if (adminRequestDto.password() != null && !adminRequestDto.password().isBlank() && Pattern.matches("^(?=.*\\p{Nd})(?=.*\\p{Lu})(?=.*\\p{Ll})(?=.*[&#@_§-])[\\p{L}\\p{Nd}&#@_§-]{8,16}$",adminRequestDto.password()))
-            admin.setPassword(adminRequestDto.password());
         Admin saved = adminDao.save(admin);
         return adminMapper.toAdminResponseDto(saved);
     }

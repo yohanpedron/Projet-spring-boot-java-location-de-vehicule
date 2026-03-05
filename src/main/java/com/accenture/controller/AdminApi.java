@@ -1,10 +1,7 @@
 package com.accenture.controller;
 
 import com.accenture.controller.advice.ErrorDto;
-import com.accenture.service.dto.AdminRequestDto;
-import com.accenture.service.dto.AdminResponseDto;
-import com.accenture.service.dto.ClientRequestDto;
-import com.accenture.service.dto.ClientResponseDto;
+import com.accenture.service.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -48,6 +45,6 @@ public interface AdminApi {
     @ApiResponse(responseCode = "200", description = "Admin modified partially")
     @ApiResponse(responseCode = "404", description = "Admin not found", content = @Content(schema = @Schema(implementation = ErrorDto.class)))
     @PatchMapping("/{id}")
-    ResponseEntity<AdminResponseDto> patchAdmin(@Parameter(description = "Admin's ID", required = true) @PathVariable("id") int idAdmin, @RequestBody AdminRequestDto adminRequestDto);
+    ResponseEntity<AdminResponseDto> patchAdmin(@Parameter(description = "Admin's ID", required = true) @PathVariable("id") int idAdmin, @RequestBody AdminRequestPatchDto adminRequestPatchDto);
 
 }

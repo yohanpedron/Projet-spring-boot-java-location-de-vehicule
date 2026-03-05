@@ -3,6 +3,7 @@ package com.accenture.controller.impl;
 import com.accenture.controller.AdminApi;
 import com.accenture.service.AdminService;
 import com.accenture.service.dto.AdminRequestDto;
+import com.accenture.service.dto.AdminRequestPatchDto;
 import com.accenture.service.dto.AdminResponseDto;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -42,8 +43,8 @@ public class AdminController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<AdminResponseDto> patchAdmin(int idAdmin, AdminRequestDto adminRequestDto) {
-        AdminResponseDto adminResponseDto = adminService.modifyPartiallyAdmin(idAdmin, adminRequestDto);
+    public ResponseEntity<AdminResponseDto> patchAdmin(int idAdmin, AdminRequestPatchDto adminRequestPatchDto) {
+        AdminResponseDto adminResponseDto = adminService.modifyPartiallyAdmin(idAdmin, adminRequestPatchDto);
         return ResponseEntity.ok(adminResponseDto);
     }
 }
