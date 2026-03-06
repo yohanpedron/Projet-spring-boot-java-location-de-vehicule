@@ -1,5 +1,7 @@
 package com.accenture.controller.advice;
 
+import com.accenture.exception.AdminException;
+import com.accenture.exception.CarException;
 import com.accenture.exception.ClientException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -22,7 +24,7 @@ public class ClientControllerAdvice {
         this.messageSource = messageSource;
     }
 
-    @ExceptionHandler({ClientException.class})
+    @ExceptionHandler({ClientException.class, AdminException.class, CarException.class})
     public ResponseEntity<ErrorDto> businessException(Exception e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new ErrorDto(
                 java.time.LocalDateTime.now(),

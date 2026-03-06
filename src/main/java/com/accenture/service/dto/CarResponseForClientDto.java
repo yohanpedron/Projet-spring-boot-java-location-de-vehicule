@@ -2,17 +2,13 @@ package com.accenture.service.dto;
 
 import java.util.List;
 
-public record CarResponseDto(
-        int id ,
+public record CarResponseForClientDto(
+
         String brand,
         String model,
         String color,
         String type,
         List<String> driverLicencesAvailable,
-        double dailyBaseRentalRate,
-        double kilometers,
-        boolean active,
-        boolean removedFromParc,
 
         int numberOfPlaces,
         String fuelType,

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -22,7 +24,7 @@ public abstract class Vehicle {
     private String model;
     private String color;
     private String type;
-    private String driverLicencesAvailable;
+    private List<String> driverLicencesAvailable;
     private double dailyBaseRentalRate;
     private double kilometers;
     private boolean active;

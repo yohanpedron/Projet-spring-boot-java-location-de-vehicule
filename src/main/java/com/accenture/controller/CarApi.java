@@ -19,7 +19,7 @@ import java.util.List;
 public interface CarApi {
 
     @Operation(summary = "Add a new car")
-    @ApiResponse(responseCode = "200", description = "Vehicle created")
+    @ApiResponse(responseCode = "200", description = "Car created")
     @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = ErrorDto.class)))
     @PutMapping
     ResponseEntity<Void> addCar(@RequestBody CarRequestDto carRequestDto);

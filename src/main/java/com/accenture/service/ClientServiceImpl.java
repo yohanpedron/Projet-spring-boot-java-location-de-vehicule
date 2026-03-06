@@ -18,6 +18,7 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Encoder;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -35,11 +36,13 @@ public class ClientServiceImpl implements ClientService{
     private final ClientMapper clientMapper;
     private final AddressMapper addressMapper;
     private final MessageSourceAccessor messageSourceAccessor;
+//    private final Encoder
 
     @Override
     public ClientResponseDto addClient(ClientRequestDto clientRequestDto) throws ClientException {
         verify(clientRequestDto);
         Client clientMapped = clientMapper.toClient(clientRequestDto);
+//        clientMapped.setPassword(clientMapped.getPassword());
         Address addressMapped = addressMapper.toEntity(clientRequestDto.addressDto());
         clientMapped.setAddress(addressMapped);
         clientMapped.setRole(Role.CLIENT);
