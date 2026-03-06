@@ -24,6 +24,7 @@ public abstract class ConnectedUser {
     private String mail;
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     public ConnectedUser(String firstName, String lastName, String mail, String password, Role role) {

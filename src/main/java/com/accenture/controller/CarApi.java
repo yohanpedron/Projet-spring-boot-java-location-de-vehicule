@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Vehicles", description = "API of vehicles management")
-@RequestMapping("/vehicles")
+@Tag(name = "Cars", description = "API of cars management")
+@RequestMapping("/cars")
 public interface CarApi {
 
     @Operation(summary = "Add a new car")

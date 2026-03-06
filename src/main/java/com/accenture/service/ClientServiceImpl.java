@@ -15,6 +15,7 @@ import com.accenture.service.dto.ClientResponseDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,16 +37,16 @@ public class ClientServiceImpl implements ClientService{
     private final ClientMapper clientMapper;
     private final AddressMapper addressMapper;
     private final MessageSourceAccessor messageSourceAccessor;
-//    private final Encoder
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public ClientResponseDto addClient(ClientRequestDto clientRequestDto) throws ClientException {
         verify(clientRequestDto);
         Client clientMapped = clientMapper.toClient(clientRequestDto);
-//        clientMapped.setPassword(clientMapped.getPassword());
+        clientMapped.setPassword(passwordEncoder.encode(clientMapped.getPassword()));
         Address addressMapped = addressMapper.toEntity(clientRequestDto.addressDto());
         clientMapped.setAddress(addressMapped);
-        clientMapped.setRole(Role.CLIENT);
+        clientMapped.setRole(Role.ROLE_CLIENT);
         clientMapped.setRegisterDate(LocalDate.now(ZoneId.of("Europe/Paris")));
         Client saved = clientDao.save(clientMapped);
         return clientMapper.toClientResponseDto(saved);

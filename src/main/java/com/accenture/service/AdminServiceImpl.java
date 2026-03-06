@@ -14,9 +14,11 @@ import com.accenture.utils.Messages;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -29,12 +31,14 @@ public class AdminServiceImpl implements AdminService {
     private final AdminDao adminDao;
     private final AdminMapper adminMapper;
     private final MessageSourceAccessor messageSourceAccessor;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public AdminResponseDto addAdmin(AdminRequestDto adminRequestDto) throws AdminException {
         verify(adminRequestDto);
         Admin adminMapped = adminMapper.toAdmin(adminRequestDto);
-        adminMapped.setRole(Role.ADMIN);
+        adminMapped.setPassword(passwordEncoder.encode(adminMapped.getPassword()));
+        adminMapped.setRole(Role.ROLE_ADMIN);
         Admin saved = adminDao.save(adminMapped);
         return adminMapper.toAdminResponseDto(saved);
     }
