@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -20,6 +21,7 @@ public class CarController implements CarApi {
     private final CarService carService;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> addCar(@Valid CarRequestDto carRequestDto){
         CarResponseDto carResponseDto = carService.addCar(carRequestDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(carResponseDto).toUri();
@@ -27,18 +29,22 @@ public class CarController implements CarApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<CarResponseDto>> cars(){ return ResponseEntity.ok(carService.findAllCars()); }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CarResponseDto> car(int idCar){ return ResponseEntity.ok(carService.findCarById(idCar)); }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCar(int idCar) {
         carService.deleteCar(idCar);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CarResponseDto> patchCar(int idCar, CarRequestDto carRequestDto) {
         CarResponseDto carResponseDto = carService.patchCar(idCar, carRequestDto);
         return ResponseEntity.ok(carResponseDto);

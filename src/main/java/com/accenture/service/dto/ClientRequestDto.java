@@ -1,6 +1,7 @@
 package com.accenture.service.dto;
 
 import com.accenture.model.Address;
+import com.accenture.utils.Messages;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -16,26 +17,26 @@ import java.util.List;
 
 public record ClientRequestDto(
 
-        @NotBlank(message = "client.firstname.nullorblank")
+        @NotBlank(message = Messages.CLIENT_FIRSTNAME_NULLORBLANK)
         @Valid
         String firstName,
 
-        @NotBlank(message = "client.lastname.nullorblank")
+        @NotBlank(message = Messages.CLIENT_LASTNAME_NULLORBLANK)
         @Valid
         String lastName,
 
-        @NotNull(message = "client.address.null")
+        @NotNull(message = Messages.CLIENT_ADDRESS_NULL)
         @Valid
         AddressDto addressDto,
 
-        @NotBlank(message = "client.mail.nullorblank")
-        @Email(message = "client.mail.wrongformat")
+        @NotBlank(message = Messages.CLIENT_MAIL_NULLORBLANK)
+        @Email(message = Messages.CLIENT_MAIL_WRONGFORMAT)
         @Schema(example = "mail@mail.com")
         @Valid
         String mail,
 
-        @NotBlank(message = "client.password.nullorblank")
-        @Pattern(regexp = "^(?=.*\\p{Nd})(?=.*\\p{Lu})(?=.*\\p{Ll})(?=.*[&#@_§-])[\\p{L}\\p{Nd}&#@_§-]{8,16}$", message = "client.password.wrongformat")
+        @NotBlank(message = Messages.CLIENT_PASSWORD_NULLORBLANK)
+        @Pattern(regexp = "^(?=.*\\p{Nd})(?=.*\\p{Lu})(?=.*\\p{Ll})(?=.*[&#@_§-])[\\p{L}\\p{Nd}&#@_§-]{8,16}$", message = Messages.CLIENT_PASSWORD_WRONGFORMAT)
         @Schema(example = "Abcdef1&")
         @Valid
         String password,
@@ -43,7 +44,7 @@ public record ClientRequestDto(
 
         LocalDate birthday,
 
-        @NotNull(message = "client.drivinglicences.null")
+        @NotNull(message = Messages.CLIENT_DRIVINGLICENCES_NULL)
         List<String> drivingLicenses
 ) {
 }

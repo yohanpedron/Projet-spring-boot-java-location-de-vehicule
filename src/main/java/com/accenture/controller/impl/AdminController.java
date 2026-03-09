@@ -31,20 +31,24 @@ public class AdminController implements AdminApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AdminResponseDto>> admins(){
         return ResponseEntity.ok(adminService.findAllAdmins());
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminResponseDto> admin(int idAdmin){ return ResponseEntity.ok(adminService.findAdminById(idAdmin)); }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteAdmin(int idAdmin) {
         adminService.deleteAdmin(idAdmin);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminResponseDto> patchAdmin(int idAdmin, AdminRequestPatchDto adminRequestPatchDto) {
         AdminResponseDto adminResponseDto = adminService.modifyPartiallyAdmin(idAdmin, adminRequestPatchDto);
         return ResponseEntity.ok(adminResponseDto);

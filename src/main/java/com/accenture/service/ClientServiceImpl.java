@@ -12,6 +12,7 @@ import com.accenture.repository.ClientDao;
 import com.accenture.service.dto.ClientRequestDto;
 import com.accenture.service.dto.ClientRequestPatchDto;
 import com.accenture.service.dto.ClientResponseDto;
+import com.accenture.service.dto.ClientResponseForAdminDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -54,9 +55,9 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<ClientResponseDto> findAllClients() {
+    public List<ClientResponseForAdminDto> findAllClients() {
         List<Client> clients = clientDao.findAll();
-        return clients.stream().map(clientMapper::toClientResponseDto).toList();
+        return clients.stream().map(clientMapper::toClientResponseForAdminDto).toList();
     }
 
     @Override

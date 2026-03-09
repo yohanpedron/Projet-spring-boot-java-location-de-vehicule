@@ -26,7 +26,7 @@ public interface ClientApi {
     @Operation(summary = "List of all clients")
     @ApiResponse(responseCode = "200", description = "List of all clients")
     @GetMapping
-    public ResponseEntity<List<ClientResponseDto>> clients();
+    public ResponseEntity<List<ClientResponseForAdminDto>> clients();
 
     @Operation(summary = "Get client by id")
     @ApiResponse(responseCode = "200", description = "Get client by id")

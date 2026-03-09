@@ -1,10 +1,7 @@
 package com.accenture.service;
 
 import com.accenture.exception.ClientException;
-import com.accenture.service.dto.AdminResponseDto;
-import com.accenture.service.dto.ClientRequestDto;
-import com.accenture.service.dto.ClientRequestPatchDto;
-import com.accenture.service.dto.ClientResponseDto;
+import com.accenture.service.dto.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -13,7 +10,7 @@ public interface ClientService {
 
     ClientResponseDto addClient(ClientRequestDto clientRequestDto) throws ClientException;
 
-    List<ClientResponseDto> findAllClients();
+    List<ClientResponseForAdminDto> findAllClients();
 
     ClientResponseDto findClientById(int idClient);
 

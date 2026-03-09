@@ -61,10 +61,13 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE,"/admins/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PATCH,"/admins/**").hasRole("ADMIN")
 
+
+                                .requestMatchers(HttpMethod.GET, "/clients/{id}").hasAnyRole("ADMIN", "CLIENT")
+
                                 .requestMatchers(HttpMethod.GET,"/clients/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT,"/clients/**").hasRole("CLIENT")
-                                .requestMatchers(HttpMethod.DELETE,"/clients/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PATCH,"/clients/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,"/clients/**").permitAll()
+                                .requestMatchers(HttpMethod.DELETE,"/clients/**").hasAnyRole("ADMIN","CLIENT")
+                                .requestMatchers(HttpMethod.PATCH,"/clients/**").hasAnyRole("ADMIN","CLIENT")
 
                                 .requestMatchers(HttpMethod.GET,"/cars/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT,"/cars/**").hasRole("ADMIN")
@@ -76,8 +79,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE,"/motorcycles/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PATCH,"/motorcycles/**").hasRole("ADMIN")
 
-                                .anyRequest().permitAll()
-                );
+                                .anyRequest().authenticated()
+                ).httpBasic(Customizer.withDefaults());
         return http.build();
     }
 

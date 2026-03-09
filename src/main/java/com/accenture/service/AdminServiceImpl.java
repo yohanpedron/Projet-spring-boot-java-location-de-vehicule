@@ -53,22 +53,22 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional(readOnly = true)
     public AdminResponseDto findAdminById(int idAdmin){
-        Admin admin = adminDao.findById(idAdmin).orElseThrow(() -> new EntityNotFoundException(messageSourceAccessor.getMessage(Messages.ADMIN_NOT_FOUND)));
+        Admin admin = adminDao.findById(idAdmin).orElseThrow(() -> new EntityNotFoundException(messageSourceAccessor.getMessage(Messages.ADMIN_ID_NOTFOUND)));
         return adminMapper.toAdminResponseDto(admin);
     }
 
     @Override
     public void deleteAdmin(int idAdmin){
         if (!adminDao.existsById(idAdmin))
-            throw new EntityNotFoundException(messageSourceAccessor.getMessage(Messages.ADMIN_NOT_FOUND));
+            throw new EntityNotFoundException(messageSourceAccessor.getMessage(Messages.ADMIN_ID_NOTFOUND));
         if (adminDao.findAll().size() <= 1)
-            throw new AdminException(messageSourceAccessor.getMessage("admins.size.onlyone"));
+            throw new AdminException(messageSourceAccessor.getMessage(Messages.ADMIN_SIZE_ONLYONE));
         adminDao.deleteById(idAdmin);
     }
 
     @Override
     public AdminResponseDto modifyPartiallyAdmin(int idAdmin, AdminRequestPatchDto adminRequestPatchDto){
-        Admin admin = adminDao.findById(idAdmin).orElseThrow(() -> new EntityNotFoundException(messageSourceAccessor.getMessage(Messages.ADMIN_NOT_FOUND)));
+        Admin admin = adminDao.findById(idAdmin).orElseThrow(() -> new EntityNotFoundException(messageSourceAccessor.getMessage(Messages.ADMIN_ID_NOTFOUND)));
         if (adminRequestPatchDto.firstName() != null && !adminRequestPatchDto.firstName().isBlank())
             admin.setFirstName(adminRequestPatchDto.firstName());
         if (adminRequestPatchDto.lastName() != null && !adminRequestPatchDto.lastName().isBlank())
@@ -80,17 +80,17 @@ public class AdminServiceImpl implements AdminService {
                 if (adminDao.findAll().stream().filter(element -> element.getMail().equals(adminRequestPatchDto.mail())).findAny().isEmpty()) {
                     admin.setMail(adminRequestPatchDto.mail());
                 } else {
-                    throw new AdminException(messageSourceAccessor.getMessage("admin.mail.alreadyexist"));
+                    throw new AdminException(messageSourceAccessor.getMessage(Messages.ADMIN_MAIL_ALREADYEXIST));
                 }
             } else {
-                throw new AdminException(messageSourceAccessor.getMessage("admin.mail.wrongformat"));
+                throw new AdminException(messageSourceAccessor.getMessage(Messages.ADMIN_MAIL_WRONGFORMAT));
             }
         }
         if (adminRequestPatchDto.password() != null && !adminRequestPatchDto.password().isBlank()) {
             if (Pattern.matches("^(?=.*\\p{Nd})(?=.*\\p{Lu})(?=.*\\p{Ll})(?=.*[&#@_§-])[\\p{L}\\p{Nd}&#@_§-]{8,16}$", adminRequestPatchDto.password()))
                 admin.setPassword(adminRequestPatchDto.password());
             else
-                throw new AdminException(messageSourceAccessor.getMessage("admin.password.wrongformat"));
+                throw new AdminException(messageSourceAccessor.getMessage(Messages.ADMIN_PASSWORD_WRONGFORMAT));
         }
         Admin saved = adminDao.save(admin);
         return adminMapper.toAdminResponseDto(saved);
@@ -98,10 +98,10 @@ public class AdminServiceImpl implements AdminService {
 
     public void verify(AdminRequestDto adminRequestDto){
         if (adminRequestDto == null)
-            throw new AdminException(messageSourceAccessor.getMessage("admin.null"));
+            throw new AdminException(messageSourceAccessor.getMessage(Messages.ADMIN_NULL));
         for(int compteur = 0;compteur < findAllAdmins().size();compteur++) {
             if (findAllAdmins().get(compteur).mail().equals(adminRequestDto.mail()))
-                throw new AdminException(messageSourceAccessor.getMessage("admin.mail.alreadyexist"));
+                throw new AdminException(messageSourceAccessor.getMessage(Messages.ADMIN_MAIL_ALREADYEXIST));
         }
     }
 }

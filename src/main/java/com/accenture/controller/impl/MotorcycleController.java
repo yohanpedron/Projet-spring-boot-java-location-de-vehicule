@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,6 +25,7 @@ public class MotorcycleController implements MotorcycleApi {
     private final MotorcycleService motorcycleService;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> addMotorcycle(@Valid MotorcycleRequestDto motorcycleRequestDto){
         MotorcycleResponseDto motorcycleResponseDto = motorcycleService.addMotorcycle(motorcycleRequestDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(motorcycleResponseDto).toUri();
@@ -31,18 +33,22 @@ public class MotorcycleController implements MotorcycleApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<MotorcycleResponseDto>> motorcycles(){ return ResponseEntity.ok(motorcycleService.findAllMotorcycles()); }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MotorcycleResponseDto> motorcycle(int idMotorcycle){ return ResponseEntity.ok(motorcycleService.findMotorcycleById(idMotorcycle)); }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteMotorcycle(int idMotorcycle) {
         motorcycleService.deleteMotorcycle(idMotorcycle);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MotorcycleResponseDto> patchMotorcycle(int idMotorcycle, MotorcycleRequestDto motorcycleRequestDto) {
         MotorcycleResponseDto motorcycleResponseDto = motorcycleService.patchMotorcycle(idMotorcycle, motorcycleRequestDto);
         return ResponseEntity.ok(motorcycleResponseDto);
