@@ -57,7 +57,7 @@ public class Messages {
     public static final String MOTORCYCLE_DAILYBASERENTALRATE_NEGATIVE = "motorcycle.dailybaserentalrate.negative";
     public static final String MOTORCYCLE_KILOMETERS_NEGATIVE = "motorcycle.kilometers.negative";
     public static final String MOTORCYCLE_NUMBEROFCYLINDERS_NEGATIVE = "motorcycle.numberofcylinders.negative";
-    public static final String MOTORCYCLE_ENGINESIZE_NULLORBLANK= "motorcycle.enginesize.nullorblank";
+    public static final String MOTORCYCLE_ENGINESIZE_NEGATIVE= "motorcycle.enginesize.negative";
     public static final String MOTORCYCLE_WEIGHT_NEGATIVE = "motorcycle.weight.negative";
     public static final String MOTORCYCLE_POWER_NEGATIVE = "motorcycle.power.negative";
     public static final String MOTORCYCLE_SADDLEHEIGHT_NEGATIVE = "motorcycle.saddleheight.negative";

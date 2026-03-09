@@ -79,8 +79,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE,"/motorcycles/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PATCH,"/motorcycles/**").hasRole("ADMIN")
 
-                                .anyRequest().authenticated()
-                ).httpBasic(Customizer.withDefaults());
+                                .anyRequest().permitAll()
+                );
         return http.build();
     }
 

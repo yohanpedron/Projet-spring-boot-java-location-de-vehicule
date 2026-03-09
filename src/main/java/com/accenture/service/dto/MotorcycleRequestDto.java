@@ -31,8 +31,8 @@ public record MotorcycleRequestDto(
         @Schema(example = "100")
         int numberOfCylinders,
 
-        @NotBlank(message = Messages.MOTORCYCLE_ENGINESIZE_NULLORBLANK)
-        String engineSize,
+        @Min(value = 0, message = Messages.MOTORCYCLE_ENGINESIZE_NEGATIVE)
+        int engineSize,
 
         @Min(value = 0, message = Messages.MOTORCYCLE_WEIGHT_NEGATIVE)
         double weight,

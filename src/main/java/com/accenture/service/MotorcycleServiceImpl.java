@@ -19,6 +19,7 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,7 +35,14 @@ public class MotorcycleServiceImpl implements MotorcycleService {
     public MotorcycleResponseDto addMotorcycle(@Valid MotorcycleRequestDto motorcycleRequestDto) throws MotorcycleException {
         verifyMotorcycle(motorcycleRequestDto);
         Motorcycle motorcycleMapped = motorcycleMapper.toMotorcycle(motorcycleRequestDto);
-        motorcycleMapped.setDriverLicencesAvailable(List.of("A1","A2","A"));
+        ArrayList<String> listOfDrivingLicences = new ArrayList<>();
+        if (motorcycleMapped.getEngineSize() <= 125 && motorcycleMapped.getPower() <= 11)
+           listOfDrivingLicences.add("A1");
+        if (motorcycleMapped.getPower() <= 35)
+            listOfDrivingLicences.add("A2");
+        if (motorcycleMapped.getPower() >= 35)
+            listOfDrivingLicences.add("A");
+        motorcycleMapped.setDriverLicencesAvailable(listOfDrivingLicences);
         Motorcycle saved = motorcycleDao.save(motorcycleMapped);
         return motorcycleMapper.toMotorcycleResponseDto(saved);
     }

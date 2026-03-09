@@ -19,7 +19,7 @@ public record MotorcycleResponseDto(
         boolean removedFromParc,
 
         int numberOfCylinders,
-        String engineSize,
+        int engineSize,
         double weight,
         double power,
         double saddleHeight,

@@ -30,7 +30,12 @@ public class CarServiceImpl implements CarService {
     public CarResponseDto addCar(@Valid CarRequestDto carRequestDto) throws CarException {
         verifyCar(carRequestDto);
         Car carMapped = carMapper.toCar(carRequestDto);
-        carMapped.setDriverLicencesAvailable(List.of("B","D1"));
+        ArrayList<String> listOfDrivingLicences = new ArrayList<>();
+        if (carMapped.getNumberOfPlaces() <= 9)
+            listOfDrivingLicences.add("B");
+        if (10 <= carMapped.getNumberOfPlaces() && carMapped.getNumberOfPlaces() <= 16)
+            listOfDrivingLicences.add("D1");
+        carMapped.setDriverLicencesAvailable(listOfDrivingLicences);
         Car saved = carDao.save(carMapped);
         return carMapper.toCarResponseDto(saved);
     }

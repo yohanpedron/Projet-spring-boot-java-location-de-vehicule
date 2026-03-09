@@ -32,22 +32,22 @@ public class ClientController implements ClientApi {
     }
 
     @Override
-    @Secured("ADMIN")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ClientResponseForAdminDto>> clients(){ return ResponseEntity.ok(clientService.findAllClients()); }
 
     @Override
-    @Secured("hasAnyRole('ADMIN','CLIENTS')")
+    @PreAuthorize("hasAnyRole('ADMIN','CLIENT')")
     public ResponseEntity<ClientResponseDto> client(int idClient){ return ResponseEntity.ok(clientService.findClientById(idClient)); }
 
     @Override
-    @PreAuthorize("hasAnyRole('ADMIN','CLIENTS')")
+    @PreAuthorize("hasAnyRole('ADMIN','CLIENT')")
     public ResponseEntity<Void> deleteClient(int idClient) {
         clientService.deleteClient(idClient);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('ADMIN','CLIENTS')")
+    @PreAuthorize("hasAnyRole('ADMIN','CLIENT')")
     public ResponseEntity<ClientResponseDto> patchClient(int idClient, ClientRequestPatchDto clientRequestPatchDto) {
         ClientResponseDto clientResponseDto = clientService.modifyPartiallyClient(idClient, clientRequestPatchDto);
         return ResponseEntity.ok(clientResponseDto);

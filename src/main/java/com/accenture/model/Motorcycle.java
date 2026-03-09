@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Motorcycle extends Vehicle{
     private int numberOfCylinders;
-    private String engineSize;
+    private int engineSize;
     private double weight;
     private double power;
     private double saddleHeight;
