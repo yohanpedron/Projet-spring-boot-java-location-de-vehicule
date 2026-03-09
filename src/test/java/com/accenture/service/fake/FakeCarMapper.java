@@ -20,11 +20,28 @@ public class FakeCarMapper implements CarMapper {
         car.setAirConditioning(carRequestDto.airConditioning());
         car.setNumberOfDoors(carRequestDto.numberOfDoors());
         car.setNumberOfLuggage(carRequestDto.numberOfLuggage());
-        return null;
+        return car;
     }
 
     @Override
     public CarResponseDto toCarResponseDto(Car car) {
-        return null;
+        return new CarResponseDto(
+                car.getId(),
+                car.getBrand(),
+                car.getModel(),
+                car.getColor(),
+                car.getType(),
+                car.getDriverLicencesAvailable(),
+                car.getDailyBaseRentalRate(),
+                car.getKilometers(),
+                car.isActive(),
+                car.isRemovedFromParc(),
+                car.getNumberOfPlaces(),
+                car.getFuelType(),
+                car.getNumberOfDoors(),
+                car.getTransmission(),
+                car.isAirConditioning(),
+                car.getNumberOfLuggage()
+               );
     }
 }
