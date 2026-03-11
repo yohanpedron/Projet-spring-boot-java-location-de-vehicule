@@ -1,19 +1,20 @@
 package com.accenture.service.dto;
 
+import com.accenture.utils.Messages;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record AddressDto(
 
-        @NotBlank(message = "client.address.street.nullorblank")
+        @NotBlank(message = Messages.CLIENT_ADDRESS_STREET_NULLORBLANK)
         String street,
 
-        @NotBlank(message = "client.address.postalcode.nullorblank")
-        @Pattern(regexp = "^[0-9]{5}$", message = "client.address.postalcode.wrongformat")
+        @NotBlank(message = Messages.CLIENT_ADDRESS_POSTALCODE_NULLORBLANK)
+        @Pattern(regexp = "^[0-9]{5}$", message = Messages.CLIENT_ADDRESS_POSTAL_WRONGFORMAT)
         String postalCode,
 
-        @NotBlank(message = "client.address.city.nullorblank")
+        @NotBlank(message = Messages.CLIENT_ADDRESS_CITY_NULLORBLANK)
         String city
 ) {
 }

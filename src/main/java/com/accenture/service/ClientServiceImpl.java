@@ -13,6 +13,7 @@ import com.accenture.service.dto.ClientRequestDto;
 import com.accenture.service.dto.ClientRequestPatchDto;
 import com.accenture.service.dto.ClientResponseDto;
 import com.accenture.service.dto.ClientResponseForAdminDto;
+import com.accenture.utils.Messages;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -108,26 +109,26 @@ public class ClientServiceImpl implements ClientService{
                 if (clientDao.findAll().stream().filter(element -> element.getMail().equals(clientRequestPatchDto.mail())).findAny().isEmpty()) {
                     client.setMail(clientRequestPatchDto.mail());
                 } else {
-                    throw new ClientException(messageSourceAccessor.getMessage("client.mail.alreadyexist"));
+                    throw new ClientException(messageSourceAccessor.getMessage(Messages.CLIENT_MAIL_ALREADYEXIST));
                 }
             } else {
-                throw new ClientException(messageSourceAccessor.getMessage("client.mail.wrongformat"));
+                throw new ClientException(messageSourceAccessor.getMessage(Messages.CLIENT_MAIL_WRONGFORMAT));
             }
         }
         if (clientRequestPatchDto.password() != null && !clientRequestPatchDto.password().isBlank()) {
             if (Pattern.matches("^(?=.*\\p{Nd})(?=.*\\p{Lu})(?=.*\\p{Ll})(?=.*[&#@_§-])[\\p{L}\\p{Nd}&#@_§-]{8,16}$", clientRequestPatchDto.password()))
                 client.setPassword(clientRequestPatchDto.password());
             else
-                throw new ClientException(messageSourceAccessor.getMessage("client.password.wrongformat"));
+                throw new ClientException(messageSourceAccessor.getMessage(Messages.CLIENT_PASSWORD_WRONGFORMAT));
         }
         if (LocalDate.now(ZoneId.of("Europe/Paris")).minusYears(18).isBefore(clientRequestPatchDto.birthday()))
-            throw new ClientException(messageSourceAccessor.getMessage("client.birthday.ageunder18"));
+            throw new ClientException(messageSourceAccessor.getMessage(Messages.CLIENT_BIRTHDAY_AGEUNDER18));
         if (!LocalDate.now(ZoneId.of("Europe/Paris")).minusYears(18).isBefore(clientRequestPatchDto.birthday()))
             client.setBirthday(clientRequestPatchDto.birthday());
         if (clientRequestPatchDto.drivingLicenses() != null && !clientRequestPatchDto.drivingLicenses().isEmpty()) {
             for(int compteur = 0;compteur < clientRequestPatchDto.drivingLicenses().size();compteur++) {
                 if (clientRequestPatchDto.drivingLicenses().get(compteur) == null || clientRequestPatchDto.drivingLicenses().get(compteur).isBlank())
-                    throw new ClientException(messageSourceAccessor.getMessage("client.oneofdrivinglicences.nullorblank"));
+                    throw new ClientException(messageSourceAccessor.getMessage(Messages.CLIENT_ONEOFDRIVINGLICENCES_NULLORBLANK));
             }
             client.setDrivingLicenses(clientRequestPatchDto.drivingLicenses());
         }
@@ -137,37 +138,18 @@ public class ClientServiceImpl implements ClientService{
 
     private void verify(ClientRequestDto clientRequestDto) {
         if (clientRequestDto == null)
-            throw new ClientException(messageSourceAccessor.getMessage("client.null"));
-        if (clientRequestDto.firstName() == null || clientRequestDto.firstName().isBlank())
-            throw new ClientException(messageSourceAccessor.getMessage("client.firstname.nullorblank"));
-        if (clientRequestDto.lastName() == null || clientRequestDto.lastName().isBlank())
-            throw new ClientException(messageSourceAccessor.getMessage("client.lastname.nullorblank"));
-        if (clientRequestDto.addressDto() == null)
-            throw new ClientException(messageSourceAccessor.getMessage("client.address.null"));
-        if (clientRequestDto.addressDto().street() == null || clientRequestDto.addressDto().street().isBlank())
-            throw new ClientException(messageSourceAccessor.getMessage("client.address.street.nullorblank"));
-        if (clientRequestDto.addressDto().postalCode() == null || clientRequestDto.addressDto().postalCode().isBlank())
-            throw new ClientException(messageSourceAccessor.getMessage("client.address.postalcode.nullorblank"));
-        if (!Pattern.matches("^[0-9]{5}$",clientRequestDto.addressDto().postalCode()))
-            throw new ClientException(messageSourceAccessor.getMessage("client.address.postalcode.wrongformat"));
-        if (clientRequestDto.addressDto().city() == null || clientRequestDto.addressDto().city().isBlank())
-            throw new ClientException(messageSourceAccessor.getMessage("client.address.city.nullorblank"));
-        if (clientRequestDto.mail() == null || clientRequestDto.mail().isBlank())
-            throw new ClientException(messageSourceAccessor.getMessage("client.mail.nullorblank"));
+            throw new ClientException(messageSourceAccessor.getMessage(Messages.CLIENT_NULL));
+
         for(int compteur = 0;compteur < findAllClients().size();compteur++) {
             if (findAllClients().get(compteur).mail().equals(clientRequestDto.mail()))
                 throw new ClientException(messageSourceAccessor.getMessage("client.mail.alreadyexist"));
         }
-        if (clientRequestDto.password() == null || clientRequestDto.password().isBlank())
-            throw new ClientException(messageSourceAccessor.getMessage("client.password.nullorblank"));
-        if (!Pattern.matches("^(?=.*\\p{Nd})(?=.*\\p{Lu})(?=.*\\p{Ll})(?=.*[&#@_§-])[\\p{L}\\p{Nd}&#@_§-]{8,16}$",clientRequestDto.password()))
-            throw new ClientException(messageSourceAccessor.getMessage("client.password.wrongformat"));
+
         if (clientRequestDto.birthday() == null)
             throw new ClientException(messageSourceAccessor.getMessage("client.birthday.null"));
         if (LocalDate.now(ZoneId.of("Europe/Paris")).minusYears(18).isBefore(clientRequestDto.birthday()))
             throw new ClientException(messageSourceAccessor.getMessage("client.birthday.ageunder18"));
-        if (clientRequestDto.drivingLicenses() == null)
-            throw new ClientException(messageSourceAccessor.getMessage("client.drivinglicences.null"));
+
         for(int compteur = 0;compteur < clientRequestDto.drivingLicenses().size();compteur++) {
             if (clientRequestDto.drivingLicenses().get(compteur) == null || clientRequestDto.drivingLicenses().get(compteur).isBlank())
                 throw new ClientException(messageSourceAccessor.getMessage("client.oneofdrivinglicences.nullorblank"));

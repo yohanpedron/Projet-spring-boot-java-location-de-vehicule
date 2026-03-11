@@ -26,16 +26,7 @@ public class FakeCarMapper implements CarMapper {
     @Override
     public CarResponseDto toCarResponseDto(Car car) {
         return new CarResponseDto(
-                car.getId(),
-                car.getBrand(),
-                car.getModel(),
-                car.getColor(),
-                car.getType(),
-                car.getDriverLicencesAvailable(),
-                car.getDailyBaseRentalRate(),
-                car.getKilometers(),
-                car.isActive(),
-                car.isRemovedFromParc(),
+
                 car.getNumberOfPlaces(),
                 car.getFuelType(),
                 car.getNumberOfDoors(),
